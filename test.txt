@@ -1,1 +1,59 @@
-https://www.linkedin.com/in/ponukumatisivaram04/
+import { TestBed } from '@angular/core/testing';
+import { MyComponent } from './my-component.component';
+import { ConfirmService } from './confirm.service';
+
+describe('MyComponent', () => {
+  let component: MyComponent;
+  let confirmService: jasmine.SpyObj<ConfirmService>;
+
+  beforeEach(() => {
+    const confirmServiceSpy = jasmine.createSpyObj('ConfirmService', ['show']);
+    
+    TestBed.configureTestingModule({
+      declarations: [MyComponent],
+      providers: [
+        { provide: ConfirmService, useValue: confirmServiceSpy }
+      ]
+    });
+
+    component = TestBed.inject(MyComponent);
+    confirmService = TestBed.inject(ConfirmService) as jasmine.SpyObj<ConfirmService>;
+  });
+
+  it('should call test() when cancel callback is triggered', () => {
+    spyOn(component, 'test'); // Spy on the test method
+
+    // Mocking the show method to call the cancel callback
+    confirmService.show.and.callFake((options: any) => {
+      // Simulate calling the cancel callback
+      options.cancel();
+    });
+
+    component.check();
+
+    expect(component.test).toHaveBeenCalled();
+    expect(confirmService.show).toHaveBeenCalledWith({
+      message: 'please confirm',
+      header: 'CONFIRMATION',
+      cancel: jasmine.any(Function),
+      confirm: jasmine.any(Function)
+    });
+  });
+
+  it('should call confirm callback and return "text2"', () => {
+    // Mocking the show method to call the confirm callback
+    confirmService.show.and.callFake((options: any) => {
+      // Simulate calling the confirm callback
+      expect(options.confirm()).toBe('text2');
+    });
+
+    component.check();
+
+    expect(confirmService.show).toHaveBeenCalledWith({
+      message: 'please confirm',
+      header: 'CONFIRMATION',
+      cancel: jasmine.any(Function),
+      confirm: jasmine.any(Function)
+    });
+  });
+});
