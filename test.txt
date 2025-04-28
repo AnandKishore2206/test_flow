@@ -1,44 +1,66 @@
-Visionary Leadership
-Example: "Your ability to set a clear vision and direction for our team has been inspiring. Your focus on long-term goals has helped us stay on track and align our efforts with the company's objectives."
+<div class="main-details-container">
+  <div class="base-details">
+    <!-- Base Details Content -->
+  </div>
 
-Open Communication
-Example: "I appreciate how approachable and open you are for discussions. You’ve created a transparent environment where everyone feels comfortable sharing their thoughts and ideas."
+  <div class="right-section">
+    <div class="dates">
+      <!-- Dates Content -->
+    </div>
+    <div class="contacts">
+      <!-- Contacts Content -->
+    </div>
+  </div>
+</div>
 
-Supportive and Empowering
-Example: "You consistently empower us to take ownership of our work, which has significantly boosted our confidence. Your support in allowing us to make decisions has fostered a stronger sense of responsibility."
 
-Mentorship and Guidance
-Example: "Your mentorship has been invaluable in my professional growth. Whether through feedback or new learning opportunities, you always push me to improve and grow."
+.main-details-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Left is twice as big */
+  gap: 1rem;
+  height: 100%; /* Fill available space */
+}
 
-Encouraging Innovation
-Example: "You always encourage us to think outside the box and bring new ideas to the table. This has fostered a culture of innovation and creativity within the team."
+.base-details {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-y: auto;
+}
 
-Adaptability
-Example: "Your ability to adapt quickly to changing circumstances, whether in project priorities or business challenges, is truly admirable. This flexibility has helped the team navigate difficult situations smoothly."
+.right-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 100%;
+}
 
-Conflict Resolution
-Example: "You handle conflicts with a calm and unbiased approach, ensuring that issues are resolved without affecting team morale. Your mediation skills have helped us maintain a collaborative environment."
+.dates, .contacts {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 8px;
+  flex: 1 1 auto; /* Grow nicely */
+  overflow-y: auto;
+}
 
-Accountability
-Example: "You lead by example when it comes to accountability. Whether it’s owning up to mistakes or ensuring deadlines are met, your integrity has set a strong standard for the team."
+/* Responsive behavior */
+@media (max-width: 1024px) {
+  .main-details-container {
+    grid-template-columns: 1fr; /* Stack vertically on tablets and below */
+  }
 
-Delegation and Trust
-Example: "You delegate tasks thoughtfully and trust us to deliver, which shows your confidence in our abilities. This has motivated me to take on more challenges and improve my skills."
+  .right-section {
+    flex-direction: row; /* Dates and Contacts side-by-side on tablet */
+    gap: 1rem;
+  }
 
-Motivating and Inspiring
-Example: "Your passion for the work we do is contagious. It has kept the team motivated, even during high-pressure periods, and helped us stay committed to achieving our goals."
+  .dates, .contacts {
+    flex: 1 1 50%; /* Each take half width */
+  }
+}
 
-Recognition and Appreciation
-Example: "You consistently recognize and appreciate the hard work we put in. Acknowledging our efforts has had a huge positive impact on team morale."
-
-Work-Life Balance
-Example: "You respect and encourage a healthy work-life balance, which has not only improved team productivity but also fostered a more positive work environment."
-
-Problem-Solving Ability
-Example: "Your approach to problem-solving is strategic and well-thought-out. You take the time to assess situations thoroughly and provide solutions that benefit the team in the long run."
-
-Emotional Intelligence
-Example: "You display a high level of emotional intelligence, understanding the needs and concerns of each team member. This empathetic leadership style has strengthened our team dynamics."
-
-Goal-Oriented Leadership
-Example: "You have a talent for setting clear, achievable goals while also challenging us to go beyond our comfort zones. Your focus on measurable outcomes has driven the team’s success."
+@media (max-width: 600px) {
+  .right-section {
+    flex-direction: column; /* Stack Dates and Contacts vertically on small mobiles */
+  }
+}
