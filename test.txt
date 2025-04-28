@@ -1,26 +1,26 @@
 <div class="main-details-container">
-  <div class="base-details">
-    <!-- Base Details Content -->
+  <app-base-details></app-base-details>
+
+  <app-generic-details></app-generic-details>
+</div>
+<div class="generic-details">
+  <div class="dates">
+    <!-- Dates content -->
   </div>
 
-  <div class="right-section">
-    <div class="dates">
-      <!-- Dates Content -->
-    </div>
-    <div class="contacts">
-      <!-- Contacts Content -->
-    </div>
+  <div class="contacts">
+    <!-- Contacts content -->
   </div>
 </div>
 
-
 .main-details-container {
   display: grid;
-  grid-template-columns: 2fr 1fr; /* Left is twice as big */
+  grid-template-columns: 2fr 1fr; /* Base bigger, Generic smaller */
   gap: 1rem;
-  height: 100%; /* Fill available space */
+  height: 100%;
 }
 
+/* Base Details styling */
 .base-details {
   background: #f9f9f9;
   padding: 1rem;
@@ -28,39 +28,46 @@
   overflow-y: auto;
 }
 
-.right-section {
+/* Generic Details box */
+.generic-details {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 8px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   height: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* subtle shadow */
+  overflow: hidden;
 }
 
+/* Inside Generic Details */
 .dates, .contacts {
   background: #f9f9f9;
-  padding: 1rem;
-  border-radius: 8px;
-  flex: 1 1 auto; /* Grow nicely */
+  padding: 0.75rem;
+  border-radius: 6px;
+  flex: 1 1 auto;
   overflow-y: auto;
 }
 
-/* Responsive behavior */
+/* Responsive adjustments */
 @media (max-width: 1024px) {
   .main-details-container {
-    grid-template-columns: 1fr; /* Stack vertically on tablets and below */
+    grid-template-columns: 1fr; /* Stack Base and Generic */
   }
 
-  .right-section {
-    flex-direction: row; /* Dates and Contacts side-by-side on tablet */
+  .generic-details {
+    flex-direction: row;
     gap: 1rem;
   }
 
   .dates, .contacts {
-    flex: 1 1 50%; /* Each take half width */
+    flex: 1 1 50%; /* Dates and Contacts side-by-side inside Generic */
   }
 }
 
 @media (max-width: 600px) {
-  .right-section {
-    flex-direction: column; /* Stack Dates and Contacts vertically on small mobiles */
+  .generic-details {
+    flex-direction: column; /* Stack Dates and Contacts again for small devices */
   }
 }
