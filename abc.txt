@@ -1,39 +1,40 @@
-Solution 1: Pre-fetch and Snapshot Data
-Snapshot Last 90 Days Data:
+<div class="box base-details">
+  <ng-container *ngIf="isLoading; else baseContent">
+    <div class="skeleton-line" *ngFor="let line of skeletonLines"></div>
+  </ng-container>
 
-Create a scheduled job that runs daily to fetch and store the last 90 days of data in a new table in your application's database.
-Ensure that this snapshot table is indexed properly to facilitate quick data retrieval.
-Popup with Two Tabs:
+  <ng-template #baseContent>
+    <!-- Actual Base Details Content -->
+  </ng-template>
+</div>
 
-Tab 1: Show data till yesterday.
-Load data from the snapshot table.
-Since this data is already in your application's database, it should load quickly.
-Tab 2: Show live data (from yesterday to current timestamp).
-Trigger an API call to fetch data from the upstream application for the most recent data.
-Display a loader or message indicating that data is being fetched.
-Advantages:
+isLoading = true;
+skeletonLines = Array(4); // number of lines you'd like to show initially
 
-Reduces load time for the initial data display as the snapshot data is pre-fetched.
-Users can access historical data quickly and still have access to the most recent data.
-Considerations:
+ngOnInit() {
+  // Simulate load or subscribe to actual data
+  setTimeout(() => {
+    this.isLoading = false;
+  }, 2000);
+}
 
-Ensure that the snapshot data is regularly updated.
-Handle potential discrepancies between the snapshot and live data.
-Solution 2: Non-blocking API Call with Notifications
-Async Data Fetching:
+.skeleton-line {
+  height: 1rem;
+  background: linear-gradient(90deg, #eee, #f5f5f5, #eee);
+  animation: skeleton-loading 1.5s infinite linear;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
 
-When the user clicks the link to open the popup, immediately show a message indicating that the data is being fetched and they can continue with other tasks.
-Make the API call to fetch the data.
-Notify the user (e.g., via a toast message) once the data is ready to be viewed.
-Data Persistence Across Sessions:
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
 
-Store the fetched data temporarily on the server or in the browser's local storage/session storage.
-If the user refreshes the page, check for the presence of the fetched data and reload it from the temporary storage if available.
-Advantages:
-
-Users are not blocked while waiting for data to load.
-Improves the user experience by allowing them to multitask.
-Considerations:
-
-Implement robust error handling and notification mechanisms.
-Ensure data consistency if the user navigates away or refreshes the page.
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
