@@ -1,54 +1,126 @@
-<div class="description-box" [class.expanded]="showFull">
-  <div class="content">
-    {{ text }}
-  </div>
-</div>
-
-<div class="toggle" (click)="toggle()">
-  {{ showFull ? 'Show less' : 'Read more' }}
-</div>
-
-.description-box {
-  max-height: 150px;
-  overflow: hidden;
-  border: 1px solid #ccc;
-  padding: 1rem;
-  border-radius: 6px;
-  background-color: #fafafa;
-  transition: max-height 0.3s ease;
-
-  &.expanded {
-    max-height: 300px; // or whatever max height you prefer
-    overflow-y: auto;
-  }
-
-  .content {
-    white-space: pre-line;
-    line-height: 1.5;
-  }
-}
-
-.toggle {
-  margin-top: 0.5rem;
-  color: #007ad9;
-  cursor: pointer;
-  font-size: 0.85rem;
-  user-select: none;
+export interface TimelineEvent {
+  label: string;
+  date: string;
+  children?: TimelineEvent[]; // optional nested events
 }
 
 
 import { Component, Input } from '@angular/core';
+import { TimelineEvent } from './timeline-event.model';
 
 @Component({
-  selector: 'app-see-more-text',
-  templateUrl: './see-more-text.component.html',
-  styleUrls: ['./see-more-text.component.scss']
+  selector: 'app-timeline',
+  templateUrl: './timeline.component.html',
+  styleUrls: ['./timeline.component.scss']
 })
-export class SeeMoreTextComponent {
-  @Input() text = '';
-  showFull = false;
+export class TimelineComponent {
+  @Input() events: TimelineEvent[] = [];
+}
 
-  toggle() {
-    this.showFull = !this.showFull;
+<div class="timeline">
+  <ng-container *ngFor="let event of events">
+    <app-timeline-node [event]="event" [level]="0"></app-timeline-node>
+  </ng-container>
+</div>
+
+import { Component, Input } from '@angular/core';
+import { TimelineEvent } from '../timeline-event.model';
+
+@Component({
+  selector: 'app-timeline-node',
+  templateUrl: './timeline-node.component.html',
+  styleUrls: ['./timeline-node.component.scss']
+})
+export class TimelineNodeComponent {
+  @Input() event!: TimelineEvent;
+  @Input() level = 0;
+}
+
+<div class="timeline-node" [ngStyle]="{ 'margin-left.px': level * 20 }">
+  <div class="marker" [ngClass]="{ parent: !event.children?.length, child: event.children?.length }"></div>
+  <div class="content">
+    <div class="label">{{ event.label }}</div>
+    <div class="date">{{ event.date }}</div>
+  </div>
+</div>
+
+<div *ngIf="event.children">
+  <ng-container *ngFor="let child of event.children">
+    <app-timeline-node [event]="child" [level]="level + 1"></app-timeline-node>
+  </ng-container>
+</div>  
+
+.timeline-node {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  padding-left: 10px;
+  margin-bottom: 12px;
+
+  .marker {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #1976d2;
+    margin-right: 8px;
+    margin-top: 4px;
+  }
+
+  .marker.child {
+    width: 8px;
+    height: 8px;
+    background-color: #90caf9;
+  }
+
+  .content {
+    .label {
+      font-weight: bold;
+    }
+
+    .date {
+      font-size: 0.85rem;
+      color: #666;
+    }
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #ddd;
+    z-index: -1;
   }
 }
+
+
+<app-timeline [events]="dateEvents"></app-timeline>
+
+dateEvents: TimelineEvent[] = [
+  {
+    label: 'Discrepancy Created',
+    date: '2024-06-01',
+    children: [
+      {
+        label: 'Initial Review Started',
+        date: '2024-06-02',
+      },
+      {
+        label: 'Initial Review Completed',
+        date: '2024-06-03',
+        children: [
+          {
+            label: 'Follow-up Added',
+            date: '2024-06-04'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    label: 'Resolution Provided',
+    date: '2024-06-10'
+  }
+];
