@@ -1,45 +1,38 @@
-<div class="description-wrapper">
-  <div class="description-box" [class.expanded]="showFull" #descBox>
-    <div class="description-text" [innerHTML]="description"></div>
-  </div>
-  <button pButton class="p-button-text toggle-btn" (click)="toggleDescription()">
-    {{ showFull ? 'Show less' : 'Read more' }}
-  </button>
-</div>
+ @Input() text: string = '';
+  @Input() collapsedHeight: string = '200px';
+  showFull = false;
 
-
-.description-wrapper {
-  position: relative;
-  max-width: 100%;
-}
-
-.description-box {
-  max-height: 200px;
-  overflow: hidden;
-  transition: max-height 0.5s ease;
-  padding-right: 1rem;
-  position: relative;
-
-  .description-text {
-    white-space: pre-line;
-    line-height: 1.5;
+  toggle() {
+    this.showFull = !this.showFull;
   }
 
+<div class="see-more-box" [ngClass]="{ 'expanded': showFull }" [ngStyle]="{ 'max-height': showFull ? 'none' : collapsedHeight }">
+  <div class="text-content">{{ text }}</div>
+</div>
+
+<button pButton class="p-button-text toggle-btn" (click)="toggle()">
+  {{ showFull ? 'Show less' : 'Read more' }}
+</button>
+
+
+.see-more-box {
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  padding-right: 1rem;
+  position: relative;
+  line-height: 1.5;
+  white-space: pre-line;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 1rem;
+
   &.expanded {
-    max-height: 500px; // Can be increased based on needs
     overflow-y: auto;
+    max-height: 300px; // Optional max height when expanded
   }
 }
 
 .toggle-btn {
   margin-top: 0.5rem;
   font-size: 0.875rem;
-  padding: 0.25rem 0.5rem;
-}
-
-
-showFull = false;
-
-toggleDescription() {
-  this.showFull = !this.showFull;
 }
