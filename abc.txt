@@ -1,40 +1,45 @@
-<div class="box base-details">
-  <ng-container *ngIf="isLoading; else baseContent">
-    <div class="skeleton-line" *ngFor="let line of skeletonLines"></div>
-  </ng-container>
-
-  <ng-template #baseContent>
-    <!-- Actual Base Details Content -->
-  </ng-template>
+<div class="description-wrapper">
+  <div class="description-box" [class.expanded]="showFull" #descBox>
+    <div class="description-text" [innerHTML]="description"></div>
+  </div>
+  <button pButton class="p-button-text toggle-btn" (click)="toggleDescription()">
+    {{ showFull ? 'Show less' : 'Read more' }}
+  </button>
 </div>
 
-isLoading = true;
-skeletonLines = Array(4); // number of lines you'd like to show initially
 
-ngOnInit() {
-  // Simulate load or subscribe to actual data
-  setTimeout(() => {
-    this.isLoading = false;
-  }, 2000);
+.description-wrapper {
+  position: relative;
+  max-width: 100%;
 }
 
-.skeleton-line {
-  height: 1rem;
-  background: linear-gradient(90deg, #eee, #f5f5f5, #eee);
-  animation: skeleton-loading 1.5s infinite linear;
-  border-radius: 4px;
-  margin-bottom: 0.5rem;
+.description-box {
+  max-height: 200px;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  padding-right: 1rem;
+  position: relative;
 
-  &:last-child {
-    margin-bottom: 0;
+  .description-text {
+    white-space: pre-line;
+    line-height: 1.5;
+  }
+
+  &.expanded {
+    max-height: 500px; // Can be increased based on needs
+    overflow-y: auto;
   }
 }
 
-@keyframes skeleton-loading {
-  0% {
-    background-position: -200px 0;
-  }
-  100% {
-    background-position: calc(200px + 100%) 0;
-  }
+.toggle-btn {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+}
+
+
+showFull = false;
+
+toggleDescription() {
+  this.showFull = !this.showFull;
 }
