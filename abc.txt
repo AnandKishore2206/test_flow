@@ -1,41 +1,54 @@
-<div class="see-more-box" [class.expanded]="showFull" [ngStyle]="{ 'max-height': showFull ? 'none' : collapsedHeight }">
-  <div class="text-content">
+<div class="description-box" [class.expanded]="showFull">
+  <div class="content">
     {{ text }}
-  </div>
-
-  <div class="read-toggle" (click)="toggle()">
-    {{ showFull ? 'Show less' : 'Read more' }}
   </div>
 </div>
 
-.see-more-box {
-  position: relative;
+<div class="toggle" (click)="toggle()">
+  {{ showFull ? 'Show less' : 'Read more' }}
+</div>
+
+.description-box {
+  max-height: 150px;
   overflow: hidden;
   border: 1px solid #ccc;
-  border-radius: 6px;
   padding: 1rem;
+  border-radius: 6px;
+  background-color: #fafafa;
   transition: max-height 0.3s ease;
-  background-color: #fff;
-  line-height: 1.5;
-  white-space: pre-line;
-  display: flex;
-  flex-direction: column;
 
   &.expanded {
+    max-height: 300px; // or whatever max height you prefer
     overflow-y: auto;
-    max-height: 300px; // optional limit even when expanded
   }
 
-  .text-content {
-    flex: 1;
+  .content {
+    white-space: pre-line;
+    line-height: 1.5;
   }
+}
 
-  .read-toggle {
-    align-self: flex-end;
-    margin-top: 0.5rem;
-    font-size: 0.85rem;
-    color: #007ad9;
-    cursor: pointer;
-    user-select: none;
+.toggle {
+  margin-top: 0.5rem;
+  color: #007ad9;
+  cursor: pointer;
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'app-see-more-text',
+  templateUrl: './see-more-text.component.html',
+  styleUrls: ['./see-more-text.component.scss']
+})
+export class SeeMoreTextComponent {
+  @Input() text = '';
+  showFull = false;
+
+  toggle() {
+    this.showFull = !this.showFull;
   }
 }
