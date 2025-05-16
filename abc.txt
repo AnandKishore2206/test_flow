@@ -1,43 +1,71 @@
-// scroll-lock.directive.ts
-import { Directive, OnInit, OnDestroy } from '@angular/core';
-import { OverlayContainer } from '@angular/cdk/overlay';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 
-@Directive({
-  selector: '[appScrollLock]'
+@Component({
+  selector: 'app-read-more-box',
+  templateUrl: './read-more-box.component.html',
+  styleUrls: ['./read-more-box.component.scss']
 })
-export class ScrollLockDirective implements OnInit, OnDestroy {
-  constructor(private overlayContainer: OverlayContainer) {}
+export class ReadMoreBoxComponent implements AfterViewInit {
+  @Input() text: string = '';
+  @ViewChild('textBox') textBox!: ElementRef;
 
-  ngOnInit(): void {
-    this.overlayContainer.getContainerElement().classList.add('scroll-lock');
+  isOverflowing: boolean = false;
+  expanded: boolean = false;
+  maxHeight: number = 90; // px
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      const el = this.textBox.nativeElement;
+      this.isOverflowing = el.scrollHeight > el.clientHeight;
+    });
   }
 
-  ngOnDestroy(): void {
-    this.overlayContainer.getContainerElement().classList.remove('scroll-lock');
+  toggle() {
+    this.expanded = !this.expanded;
   }
 }
 
 
-/* styles.scss */
-.scroll-lock {
-  overflow: hidden;
-  height: 100vh;
-}
 
 
-<!-- flyin.component.html -->
-<div class="flyin-wrapper" appScrollLock>
-  <!-- Fly-in content -->
+<div class="read-more-container">
+  <div
+    #textBox
+    class="text-box"
+    [ngClass]="{ expanded: expanded }"
+    [style.maxHeight.px]="expanded ? null : maxHeight"
+  >
+    {{ text }}
+  </div>
+
+  <!-- Show toggle only if overflowing -->
+  <div class="read-more-toggle" *ngIf="isOverflowing">
+    <a (click)="toggle()">{{ expanded ? 'Show less' : 'Read more' }}</a>
+  </div>
 </div>
 
 
-// your.module.ts
-import { ScrollLockDirective } from './directives/scroll-lock.directive';
 
-@NgModule({
-  declarations: [
-    ScrollLockDirective,
-    // other components
-  ]
-})
-export class YourModule {}
+
+.read-more-container {
+  .text-box {
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    white-space: pre-wrap;
+  }
+
+  .text-box.expanded {
+    max-height: none;
+    overflow: auto;
+  }
+
+  .read-more-toggle {
+    text-align: right;
+    margin-top: 4px;
+
+    a {
+      cursor: pointer;
+      color: #007bff;
+    }
+  }
+}
