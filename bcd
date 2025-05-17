@@ -1,0 +1,29 @@
+dateEvents: TimelineEvent[] = [
+  {
+    label: 'Discrepancy Created',
+    date: '2024-06-01',
+    children: [
+      {
+        label: 'Initial Review Started',
+        date: '2024-06-02',
+      },
+      {
+        label: 'Initial Review Completed',
+        date: '2024-06-03',
+        children: [
+          {
+            label: 'Follow-up Added',
+            date: '2024-06-04'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    label: 'Resolution Provided',
+    date: '2024-06-10'
+  }
+];
+
+
+<app-timeline [events]="dateEvents"></app-timeline>
