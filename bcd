@@ -1,29 +1,108 @@
-dateEvents: TimelineEvent[] = [
+<div class="timeline-container">
+  <div *ngFor="let item of events" class="timeline-row">
+    <div class="timeline-marker">
+      <div
+        class="dot"
+        [ngClass]="{
+          'dot-parent': item.children?.length,
+          'dot-child': !item.children?.length
+        }"
+      ></div>
+    </div>
+    <div class="timeline-content" [ngStyle]="{ 'margin-left.px': item.level * 20 }">
+      <div class="label">{{ item.label }}</div>
+
+      <!-- Recursive children -->
+      <ng-container *ngIf="item.children?.length">
+        <ng-container *ngFor="let child of item.children">
+          <app-timeline-node [event]="child" [level]="item.level + 1"></app-timeline-node>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+
+
+.timeline-container {
+  position: relative;
+  padding-left: 30px;
+  border-left: 2px dotted #c5c5c5; // Main vertical line
+}
+
+.timeline-row {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.timeline-marker {
+  width: 20px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: #007ad9;
+  border-radius: 50%;
+  position: absolute;
+  left: -6px;
+}
+
+.dot-parent {
+  width: 12px;
+  height: 12px;
+  background-color: #007ad9;
+}
+
+.dot-child {
+  width: 8px;
+  height: 8px;
+  background-color: #9c9c9c;
+}
+
+.timeline-content {
+  flex: 1;
+  padding-left: 10px;
+}
+
+.label {
+  font-size: 14px;
+  color: #333;
+}
+
+
+
+events = [
   {
-    label: 'Discrepancy Created',
-    date: '2024-06-01',
+    label: 'Discrepancy Raised',
+    level: 0,
     children: [
       {
-        label: 'Initial Review Started',
-        date: '2024-06-02',
-      },
-      {
-        label: 'Initial Review Completed',
-        date: '2024-06-03',
+        label: 'Initial Review',
+        level: 1,
         children: [
           {
-            label: 'Follow-up Added',
-            date: '2024-06-04'
+            label: 'Reviewed by Analyst',
+            level: 2,
+            children: []
           }
         ]
+      },
+      {
+        label: 'QA Review',
+        level: 1,
+        children: []
       }
     ]
   },
   {
-    label: 'Resolution Provided',
-    date: '2024-06-10'
+    label: 'Closed',
+    level: 0,
+    children: []
   }
 ];
-
-
-<app-timeline [events]="dateEvents"></app-timeline>
