@@ -1,71 +1,50 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
-
-@Component({
-  selector: 'app-read-more-box',
-  templateUrl: './read-more-box.component.html',
-  styleUrls: ['./read-more-box.component.scss']
-})
-export class ReadMoreBoxComponent implements AfterViewInit {
-  @Input() text: string = '';
-  @ViewChild('textBox') textBox!: ElementRef;
-
-  isOverflowing: boolean = false;
-  expanded: boolean = false;
-  maxHeight: number = 90; // px
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      const el = this.textBox.nativeElement;
-      this.isOverflowing = el.scrollHeight > el.clientHeight;
-    });
-  }
-
-  toggle() {
-    this.expanded = !this.expanded;
-  }
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden; /* Prevent scrolling the whole page */
+  font-family: sans-serif;
 }
 
+.page-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full viewport height */
+}
 
+.header {
+  height: 60px;
+  background-color: #1e1e2f;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
 
+.footer {
+  height: 50px;
+  background-color: #1e1e2f;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 16px;
+  flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+}
 
-<div class="read-more-container">
-  <div
-    #textBox
-    class="text-box"
-    [ngClass]="{ expanded: expanded }"
-    [style.maxHeight.px]="expanded ? null : maxHeight"
-  >
-    {{ text }}
-  </div>
+.content {
+  flex: 1;
+  overflow-y: auto; /* Only this part scrolls */
+  background-color: #f9f9f9;
+}
 
-  <!-- Show toggle only if overflowing -->
-  <div class="read-more-toggle" *ngIf="isOverflowing">
-    <a (click)="toggle()">{{ expanded ? 'Show less' : 'Read more' }}</a>
-  </div>
-</div>
-
-
-
-
-.read-more-container {
-  .text-box {
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-    white-space: pre-wrap;
-  }
-
-  .text-box.expanded {
-    max-height: none;
-    overflow: auto;
-  }
-
-  .read-more-toggle {
-    text-align: right;
-    margin-top: 4px;
-
-    a {
-      cursor: pointer;
-      color: #007bff;
-    }
-  }
+.scroll-body {
+  padding: 16px;
+  min-height: 2000px; /* Demo: force scroll */
 }
