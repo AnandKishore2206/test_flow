@@ -5,3 +5,7 @@ The project aims to build an AI-driven assistant that evaluates the quality of J
 
 
 This project leverages AI/ML and large language models (LLMs) to automatically assess the quality of JIRA user stories and perform intelligent impact analysis by learning from historical JIRAs and their associated code commits. It ensures that new stories are complete, clear, and aligned with best practices by providing real-time feedback and improvement suggestions. By identifying similar past stories and analyzing their code changes, the system can predict which files, modules, or services are likely to be impacted, helping developers plan changes more effectively. This reduces manual effort, minimizes rework, and improves the speed and accuracy of development. The solution fosters better collaboration between product, development, and QA teams, enhances organizational memory by reusing past insights, and scales easily across multiple teams and projects. Ultimately, it boosts software quality, delivery speed, and team productivity while lowering the risk of defects and missed dependencies.
+
+
+
+This project uses AI/ML and LLMs to assess JIRA story quality and predict code impact by analyzing past JIRAs and commits. It improves clarity, reduces rework, and suggests impacted areas for new stories, saving developer time. By automating quality checks and impact analysis, it enhances collaboration, speeds up delivery, and reduces risk—boosting overall software quality and team productivity.
