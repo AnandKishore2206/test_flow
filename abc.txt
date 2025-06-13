@@ -1,3 +1,116 @@
-Working with you has been an absolute privilege. You've always been so affirmative, clear in your communication, and incredibly strong in your decisions. Your deep domain knowledge and sharp memory have amazed me more times than I can count. You have this rare ability to take on a huge amount of work and still keep everything aligned toward our common goals — it's been truly inspiring."
+ Problem Statement:
+Agile teams often struggle with unclear or ambiguous JIRA stories, leading to confusion, rework, and delivery delays.
 
-"Your insights have always added so much value to our discussions, and your presence will definitely be missed. It’s hard to see you go, but I’m sure your next project is lucky to have you. Wishing you all the best on your new journey!"
+🧠 Our AI Solution:
+An end-to-end system that evaluates the clarity and ambiguity of JIRA stories in real time, provides actionable suggestions, and analyzes contextual impact on related stories and code.
+
+🔍 How We Solve It:
+Component	Description	ML Type
+Zero-shot classification	Evaluates if a story is “clear” or “unclear” without needing custom training data	✅ Supervised (Pretrained)
+Semantic similarity	Identifies related past JIRA stories using vector embeddings	✅ Unsupervised
+LLM-powered feedback	Provides human-like suggestions to improve story quality (vague terms, missing info)	🔄 Prompted LLM
+Impact prediction	Suggests potentially impacted code files based on similar past commits	🔍 Heuristic + context
+
+📈 Benefits:
+Improves JIRA quality in real time
+
+Understands project context without needing manual labels
+
+Can plug into any project with minimal setup
+
+🧩 Tech Stack:
+Transformers (BART, Sentence-BERT)
+
+LLM API (internal GPT or OpenAI)
+
+Streamlit (UI)
+
+Python (NLP pipeline)
+
+📝 Summary Paragraph for Judges
+Our project, AI-Powered JIRA Story Analyzer, uses a combination of supervised, unsupervised, and LLM-based NLP techniques to evaluate and improve the quality of Agile JIRA stories. We use zero-shot classification (BART) to assess story clarity and ambiguity without custom training. Using Sentence-BERT embeddings, we match new stories to similar past stories to understand context and impact. We also use a Large Language Model (GPT) to provide human-like feedback by identifying vague phrases and suggesting improvements. The tool helps teams write clearer, more actionable stories and anticipate code impact — all through a simple, intuitive UI built with Streamlit.
+
+
+
+
+
+
+
+
+
+
+What Is Semantic Similarity?
+Semantic similarity is the task of measuring how similar two pieces of text are in meaning, not just in wording.
+
+📝 Example:
+Sentence A	Sentence B	Are They Similar?
+"Login to view your dashboard."	"Users must authenticate before accessing insights."	✅ Yes (same meaning)
+"Create a user account."	"Delete the project."	❌ No (different meaning)
+
+Traditional keyword or rule-based systems might miss this — but semantic similarity models understand meaning.
+
+⚙️ How Does It Work?
+1. Sentence Embeddings
+We use models like Sentence-BERT (SBERT) to convert entire sentences into vectors (dense number arrays) in a high-dimensional space (e.g., 768 dimensions).
+
+python
+Copy
+Edit
+from sentence_transformers import SentenceTransformer
+model = SentenceTransformer("all-MiniLM-L6-v2")
+vector = model.encode("User logs in to dashboard.")
+Each sentence becomes a point in a multi-dimensional space. Similar sentences are closer together.
+
+2. Cosine Similarity
+We measure how close two vectors are using cosine similarity, which gives a score between:
+
+1.0 → exactly the same
+
+0.0 → completely different
+
+~0.7+ → often means semantically similar
+
+python
+Copy
+Edit
+from sentence_transformers import util
+score = util.cos_sim(vec1, vec2)
+3. Finding Related Stories (Your Case)
+You embed all JIRA descriptions once:
+
+python
+Copy
+Edit
+jira_embeddings = model.encode([jira["description"] for jira in all_stories])
+Then when a new story comes:
+
+python
+Copy
+Edit
+query_vec = model.encode("As a user, I want to reset password.")
+You compare query_vec to all jira_embeddings using cosine similarity. The ones with highest scores are most semantically similar.
+
+🎯 Accuracy — How Good Is It?
+Factor	Accuracy Explanation
+✅ General use cases	Sentence-BERT (especially all-MiniLM-L6-v2 or mpnet-base-v2) gives very good results in 80–90% of business/IT use cases.
+❌ Domain-specific language	If your JIRAs have heavy technical or domain-specific jargon, it may not be as accurate — fine-tuning helps in that case.
+✅ No need for labels	Unlike classification, you don’t need training data. It “just works” out of the box.
+✅ Fast & scalable	Embeddings can be stored and reused, and comparisons are fast using vector math.
+
+🧪 Example Scores
+Sentence A	Sentence B	Cosine Score
+"User logs in to dashboard"	"Authenticate to access dashboard"	0.87
+"Update project metadata"	"Delete project files"	0.45
+"View user list"	"Login to system"	0.62
+
+🛡️ How to Make It More Accurate (If Needed)
+🔁 Fine-tune SBERT on pairs of similar/dissimilar JIRA stories (if you have labeled examples).
+
+🧠 Add context — combine story + title + acceptance criteria into one input.
+
+🚫 Filter out noise — don’t compare very short or placeholder JIRAs.
+
+🧮 Use approximate nearest neighbor search (e.g., FAISS) if you scale up to 1000s of stories.
+
+📌 TL;DR for Hackathon
+We use semantic similarity via Sentence-BERT to compare JIRA stories not just by keywords, but by meaning. It works by embedding each story into vector space, and using cosine similarity to find the most related stories. It’s accurate for most business language and requires no labeled data — making it perfect for hackathon use.
